@@ -1,5 +1,6 @@
 using BussinessLayer;
 using FundooManager.Interface;
+using FundooManager.Manager;
 using FundooManager.Model;
 using FundooRepository.Interface;
 using FundooRepository.Repository;
@@ -18,6 +19,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
+builder.Services.AddTransient<INoteManager, NoteManager>();
+builder.Services.AddTransient<INoteRepository, NoteRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
