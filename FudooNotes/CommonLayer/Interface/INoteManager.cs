@@ -11,5 +11,10 @@ namespace FundooManager.Interface
     {
         public NoteModel CreateNode(NoteModel noteModel, int userId);
         public NoteModel DisplayNodes(int userId);
+        public UpdateNoteModel UpdateNotes(UpdateNoteModel updateNote, int userId, int noteId);
+        public bool DeleteNote(int userId, int noteId);
+        public bool PinNote(bool pinNote, int userId, int noteId);
+        public bool ArchiveNote(bool archiveNote, int userId, int noteId);
+        public bool TrashNote(bool trashNote, int userID, int noteID);
     }
 }

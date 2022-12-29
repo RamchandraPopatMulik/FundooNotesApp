@@ -114,6 +114,193 @@ namespace FundooRepository.Repository
                 connection.Close();
             }
         }
+        public UpdateNoteModel UpdateNotes(UpdateNoteModel updateNote, int userId, int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand command = new SqlCommand("sp_update", connection);
+
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
+                    command.Parameters.AddWithValue("@title", updateNote.title);
+                    command.Parameters.AddWithValue("@discription", updateNote.discription);
+                    command.Parameters.AddWithValue("@reminder", updateNote.reminder);
+                    command.Parameters.AddWithValue("@colour", updateNote.colour);
+                    command.Parameters.AddWithValue("@image", updateNote.image);
+                    command.Parameters.AddWithValue("@archive", updateNote.archive);
+                    command.Parameters.AddWithValue("@pinNotes", updateNote.pinNotes);
+                    command.Parameters.AddWithValue("@trash", updateNote.trash);
+                    command.Parameters.AddWithValue("@modified", updateNote.modified);
+
+                    connection.Open();
+                    int deleteOrNot = command.ExecuteNonQuery();
+
+                    if (deleteOrNot >= 1)
+                    {
+                        return updateNote;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+        public bool DeleteNote(int userId, int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand command = new SqlCommand("SPDeleteNotes", connection);
+
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
+
+                    connection.Open();
+                    int deleteOrNot = command.ExecuteNonQuery();
+
+                    if (deleteOrNot >= 1)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+        public bool PinNote(bool pinNote, int userID, int noteID)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand command = new SqlCommand("sp_PinNote", connection);
+
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userID", userID);
+                    command.Parameters.AddWithValue("@noteID", noteID);
+                    command.Parameters.AddWithValue("@pinNotes", pinNote);
+
+                    connection.Open();
+                    int deleteOrNot = command.ExecuteNonQuery();
+
+                    if (deleteOrNot >= 1)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+        public bool ArchiveNote(bool archiveNote, int userId, int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand command = new SqlCommand("sp_Archieve", connection);
+
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
+                    command.Parameters.AddWithValue("@archive", archiveNote);
+
+                    connection.Open();
+                    int deleteOrNot = command.ExecuteNonQuery();
+
+                    if (deleteOrNot >= 1)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+        public bool TrashNote(bool trashNote, int userId, int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand command = new SqlCommand("sp_Trash", connection);
+
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
+                    command.Parameters.AddWithValue("@trash", trashNote);
+
+                    connection.Open();
+                    int deleteOrNot = command.ExecuteNonQuery();
+
+                    if (deleteOrNot >= 1)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
     }
 }
 

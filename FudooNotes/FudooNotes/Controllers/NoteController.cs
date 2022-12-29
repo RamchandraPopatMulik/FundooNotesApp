@@ -55,5 +55,100 @@ namespace FudooNotes.Controllers
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
         }
+        [HttpPatch]
+        [Route("updatenote")]
+        public IActionResult UpdateNotes(UpdateNoteModel updateNote, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                UpdateNoteModel updateNoteData = this.noteManager.UpdateNotes(updateNote, userId, noteId);
+                if (updateNote != null)
+                {
+                    return this.Ok(new { success = true, message = "Note Updated Successfully", result = updateNote });
+                }
+                return this.Ok(new { success = true, message = "Note Not Updated" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        [HttpDelete]
+        [Route("deletenote")]
+        public IActionResult DeleteNote(int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool deleteNote = this.noteManager.DeleteNote(userId, noteId);
+                if (deleteNote)
+                {
+                    return this.Ok(new { success = true, message = "Delete Note Successfully", result = deleteNote });
+                }
+                return this.Ok(new { success = true, message = "Note Not Deleted" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("pinnote")]
+        public IActionResult PinNote(bool pinNote, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool pin = this.noteManager.PinNote(pinNote, userId, noteId);
+                if (pin)
+                {
+                    return this.Ok(new { success = true, message = "PinNote Operation is Successfull", result = pin });
+                }
+                return this.Ok(new { success = true, message = "Pin Operation is Unsuccessfull" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("archivenote")]
+        public IActionResult ArchiveNote(bool archiveNote, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool archive = this.noteManager.ArchiveNote(archiveNote, userId, noteId);
+                if (archive)
+                {
+                    return this.Ok(new { success = true, message = "Archive Operation is Successfull", result = archive });
+                }
+                return this.Ok(new { success = true, message = "Archive Operation is Unsuccessfull" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("trashnote")]
+        public IActionResult TrashNote(bool trashNote, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool trash = this.noteManager.TrashNote(trashNote, userId, noteId);
+                if (trash)
+                {
+                    return this.Ok(new { success = true, message = "Trash Operation is Successfull", result = trash });
+                }
+                return this.Ok(new { success = true, message = "Trash Operation is Unsuccessfull" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
     }
 }
