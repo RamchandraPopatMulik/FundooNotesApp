@@ -40,22 +40,60 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+
         public bool Delete(int userId, int noteId)
         {
             try
             {
-                return this.noteRepository.Delete(userId,noteId);
+                return this.noteRepository.DeleteNote(userId,noteId);
+
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
+
         public UpdateNoteModel UpdateNote(UpdateNoteModel updateNoteModel, int userId, int noteId)
         {
             try
             {
-                return this.noteRepository.UpdateNote(updateNoteModel,userId, noteId);
+                return this.noteRepository.UpdateNotes(updateNoteModel,userId, noteId);
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public bool PinNote(bool pinNote, int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.PinNote(pinNote, userId, noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public bool ArchiveNote(bool archiveNote, int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.ArchiveNote(archiveNote, userId, noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public bool TrashNote(bool trashNote, int userID, int noteID)
+        {
+            try
+            {
+                return this.noteRepository.TrashNote(trashNote, userID, noteID);
+
             }
             catch (Exception ex)
             {
@@ -67,7 +105,7 @@ namespace FundooManager.Manager
         {
             try
             {
-                return this.noteRepository.PinNotes(pin, userId, noteId);
+                return this.noteRepository.PinNote(pin, userId, noteId);
             }
             catch (Exception ex)
             {
@@ -78,7 +116,7 @@ namespace FundooManager.Manager
         {
             try
             {
-                return this.noteRepository.Archieve(arch, userId, noteId);
+                return this.noteRepository.ArchiveNote(arch, userId, noteId);
             }
             catch (Exception ex)
             {
@@ -89,7 +127,7 @@ namespace FundooManager.Manager
         {
             try
             {
-                return this.noteRepository.Archieve(trash, userId, noteId);
+                return this.noteRepository.TrashNote(trash, userId, noteId);
             }
             catch (Exception ex)
             {

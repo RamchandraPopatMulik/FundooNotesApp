@@ -16,5 +16,7 @@ namespace FundooModel
         public bool archive { get; set; }
         public bool pinNotes { get; set; }
         public bool trash { get; set; }
+        public DateTime modified { get; set; }
+
     }
 }

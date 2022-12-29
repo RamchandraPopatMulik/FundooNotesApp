@@ -115,32 +115,71 @@ namespace FundooRepository.Repository
                 connection.Close();
             }
         }
-        public bool Delete(int userId,int noteId)
+        public UpdateNoteModel UpdateNotes(UpdateNoteModel updateNote, int userId, int noteId)
         {
             SqlConnection connection = new SqlConnection(connectionString);
             try
             {
-                NoteModel noteModel = new NoteModel();
                 using (connection)
                 {
-                    SqlCommand sqlCommand = new SqlCommand("SPDeleteNotes", connection);
+                    SqlCommand command = new SqlCommand("sp_update", connection);
 
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-
-                    sqlCommand.Parameters.AddWithValue("@userId", userId);
-                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
+                    command.Parameters.AddWithValue("@title", updateNote.title);
+                    command.Parameters.AddWithValue("@discription", updateNote.discription);
+                    command.Parameters.AddWithValue("@reminder", updateNote.reminder);
+                    command.Parameters.AddWithValue("@colour", updateNote.colour);
+                    command.Parameters.AddWithValue("@image", updateNote.image);
+                    command.Parameters.AddWithValue("@archive", updateNote.archive);
+                    command.Parameters.AddWithValue("@pinNotes", updateNote.pinNotes);
+                    command.Parameters.AddWithValue("@trash", updateNote.trash);
+                    command.Parameters.AddWithValue("@modified", updateNote.modified);
 
                     connection.Open();
-                    int store = sqlCommand.ExecuteNonQuery();
+                    int deleteOrNot = command.ExecuteNonQuery();
 
-                    if (store >= 1)
+                    if (deleteOrNot >= 1)
+                    {
+                        return updateNote;
+                    }
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+        }
+        public bool DeleteNote(int userId, int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand command = new SqlCommand("SPDeleteNotes", connection);
+
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
+
+                    connection.Open();
+                    int deleteOrNot = command.ExecuteNonQuery();
+
+                    if (deleteOrNot >= 1)
                     {
                         return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -149,84 +188,34 @@ namespace FundooRepository.Repository
             }
             finally
             {
-                connection.Close();
-            }
-        }
-        public UpdateNoteModel UpdateNote(UpdateNoteModel updateNoteModel,int userId,int noteId)
-        {
-            SqlConnection connection = new SqlConnection(connectionString);
-            try
-            {
-                using (connection)
+                if (connection.State == ConnectionState.Open)
                 {
-                    SqlCommand sqlCommand = new SqlCommand("sp_update", connection);
-
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@userId", userId);
-                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
-                    sqlCommand.Parameters.AddWithValue("@title", updateNoteModel.title);
-                    sqlCommand.Parameters.AddWithValue("@discription", updateNoteModel.discription);
-                    sqlCommand.Parameters.AddWithValue("@reminder", updateNoteModel.reminder);
-                    sqlCommand.Parameters.AddWithValue("@colour", updateNoteModel.colour);
-                    sqlCommand.Parameters.AddWithValue("@image", updateNoteModel.image);
-                    sqlCommand.Parameters.AddWithValue("@archive", updateNoteModel.archive);
-                    sqlCommand.Parameters.AddWithValue("@pinNotes", updateNoteModel.pinNotes);
-                    sqlCommand.Parameters.AddWithValue("@trash", updateNoteModel.trash);
-                    sqlCommand.Parameters.AddWithValue("@modified", DateTime.UtcNow);
-
-                    connection.Open();
-                    int store = sqlCommand.ExecuteNonQuery();
-
-                    if (store >= 1)
-                    {
-                        return updateNoteModel;
-                    }
-                    else
-                    {
-                        return null;
-                    }
+                    connection.Close();
                 }
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                connection.Close();
-            }
-
         }
-        public bool PinNotes(bool pin,int userId,int noteId)
+        public bool PinNote(bool pinNote, int userID, int noteID)
         {
             SqlConnection connection = new SqlConnection(connectionString);
             try
             {
                 using (connection)
                 {
-                    SqlCommand sqlCommand = new SqlCommand("sp_PinNote", connection);
+                    SqlCommand command = new SqlCommand("sp_PinNote", connection);
 
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@userId", userId);
-                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
-                    sqlCommand.Parameters.AddWithValue("@pinNotes", pin);
-                   
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userID", userID);
+                    command.Parameters.AddWithValue("@noteID", noteID);
+                    command.Parameters.AddWithValue("@pinNotes", pinNote);
 
                     connection.Open();
-                    int store = sqlCommand.ExecuteNonQuery();
+                    int deleteOrNot = command.ExecuteNonQuery();
 
-                    if (store >= 1)
+                    if (deleteOrNot >= 1)
                     {
                         return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -235,37 +224,34 @@ namespace FundooRepository.Repository
             }
             finally
             {
-                connection.Close();
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
-        public bool Archieve(bool arch, int userId, int noteId)
+        public bool ArchiveNote(bool archiveNote, int userId, int noteId)
         {
             SqlConnection connection = new SqlConnection(connectionString);
             try
             {
                 using (connection)
                 {
-                    SqlCommand sqlCommand = new SqlCommand("sp_Archieve", connection);
+                    SqlCommand command = new SqlCommand("sp_Archieve", connection);
 
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@userId", userId);
-                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
-                    sqlCommand.Parameters.AddWithValue("@archive", arch);
-
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
+                    command.Parameters.AddWithValue("@archive", archiveNote);
 
                     connection.Open();
-                    int store = sqlCommand.ExecuteNonQuery();
+                    int deleteOrNot = command.ExecuteNonQuery();
 
-                    if (store >= 1)
+                    if (deleteOrNot >= 1)
                     {
                         return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -274,37 +260,34 @@ namespace FundooRepository.Repository
             }
             finally
             {
-                connection.Close();
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
-        public bool Trash(bool trash, int userId, int noteId)
+        public bool TrashNote(bool trashNote, int userId, int noteId)
         {
             SqlConnection connection = new SqlConnection(connectionString);
             try
             {
                 using (connection)
                 {
-                    SqlCommand sqlCommand = new SqlCommand("sp_Trash", connection);
+                    SqlCommand command = new SqlCommand("sp_Trash", connection);
 
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-
-                    sqlCommand.CommandType = CommandType.StoredProcedure;
-                    sqlCommand.Parameters.AddWithValue("@userId", userId);
-                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
-                    sqlCommand.Parameters.AddWithValue("@trash", trash);
-
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@userId", userId);
+                    command.Parameters.AddWithValue("@noteId", noteId);
+                    command.Parameters.AddWithValue("@trash", trashNote);
 
                     connection.Open();
-                    int store = sqlCommand.ExecuteNonQuery();
+                    int deleteOrNot = command.ExecuteNonQuery();
 
-                    if (store >= 1)
+                    if (deleteOrNot >= 1)
                     {
                         return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
             catch (Exception ex)
@@ -313,7 +296,10 @@ namespace FundooRepository.Repository
             }
             finally
             {
-                connection.Close();
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
         }
     }
