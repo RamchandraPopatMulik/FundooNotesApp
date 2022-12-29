@@ -134,5 +134,27 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+        public bool Colour(string colour, int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.Colour(colour, userId, noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public bool Reminder(string reminder, int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.Colour(reminder, userId, noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

@@ -17,6 +17,8 @@ namespace FundooManager.Interface
         public bool PinNotes(bool pin, int userId, int noteId);
         public bool Archieve(bool arch, int userId, int noteId);
         public bool Trash(bool trash, int userId, int noteId);
+        public bool Colour(string colour, int userId, int noteId);
+        public bool Reminder(string reminder, int userId, int noteId);
 
     }
 }

@@ -121,9 +121,9 @@ namespace FudooNotes.Controllers
                 bool pin = this.noteManager.PinNotes(pinNote, userId, noteId);
                 if (pin)
                 {
-                    return this.Ok(new { success = true, message = "PinNote Operation is Successfull", result = pin });
+                    return this.Ok(new { success = true, message = "PinNote Operation is Successfully", result = pin });
                 }
-                return this.Ok(new { success = true, message = "Pin Operation is Unsuccessfull" });
+                return this.Ok(new { success = true, message = "Pin Operation is Unsuccessfully" });
             }
             catch (Exception ex)
             {
@@ -131,7 +131,7 @@ namespace FudooNotes.Controllers
             }
         }
         [HttpPut]
-        [Route("archivenote")]
+        [Route("NoteArchiev")]
         public IActionResult ArchiveNote(bool archiveNote, int noteId)
         {
             try
@@ -140,9 +140,9 @@ namespace FudooNotes.Controllers
                 bool archive = this.noteManager.Archieve(archiveNote, userId, noteId);
                 if (archive)
                 {
-                    return this.Ok(new { success = true, message = "Archive Operation is Successfull", result = archive });
+                    return this.Ok(new { success = true, message = "Archive Operation is Successfully", result = archive });
                 }
-                return this.Ok(new { success = true, message = "Archive Operation is Unsuccessfull" });
+                return this.Ok(new { success = true, message = "Archive Operation is Unsuccessfully" });
             }
             catch (Exception ex)
             {
@@ -150,7 +150,7 @@ namespace FudooNotes.Controllers
             }
         }
         [HttpPut]
-        [Route("trashnote")]
+        [Route("NoteTrash")]
         public IActionResult TrashNote(bool trashNote, int noteId)
         {
             try
@@ -159,9 +159,47 @@ namespace FudooNotes.Controllers
                 bool trash = this.noteManager.Trash(trashNote, userId, noteId);
                 if (trash)
                 {
-                    return this.Ok(new { success = true, message = "Trash Operation is Successfull", result = trash });
+                    return this.Ok(new { success = true, message = "Trash Operation is Successfully", result = trash });
                 }
-                return this.Ok(new { success = true, message = "Trash Operation is Unsuccessfull" });
+                return this.Ok(new { success = true, message = "Trash Operation is Unsuccessfully" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("NoteColour")]
+        public IActionResult Colour(string colour, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool Colour = this.noteManager.Colour(colour, userId, noteId);
+                if (Colour)
+                {
+                    return this.Ok(new { success = true, message = "Colour Updated Successfully", result = colour });
+                }
+                return this.Ok(new { success = true, message = "Colour Not Updated Successfully Please Enter Valid Note Id" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("NoteReminder")]
+        public IActionResult Reminder(string reminder, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool ReminderData = this.noteManager.Colour(reminder, userId, noteId);
+                if (ReminderData)
+                {
+                    return this.Ok(new { success = true, message = "Reminder Updated Successfully", result = reminder });
+                }
+                return this.Ok(new { success = true, message = "Reminder Not Updated Successfully Please Enter Valid Note Id" });
             }
             catch (Exception ex)
             {
