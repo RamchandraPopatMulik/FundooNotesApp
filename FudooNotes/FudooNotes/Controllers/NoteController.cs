@@ -150,5 +150,43 @@ namespace FudooNotes.Controllers
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
         }
+        [HttpPut]
+        [Route("NoteColour")]
+        public IActionResult Colour(string colour, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool Colour = this.noteManager.Colour(colour, userId, noteId);
+                if (Colour)
+                {
+                    return this.Ok(new { success = true, message = "Colour Updated Successfully", result = colour });
+                }
+                return this.Ok(new { success = true, message = "Colour Not Updated Successfully Please Enter Valid Note Id" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("NoteReminder")]
+        public IActionResult Reminder(string reminder, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool ReminderData = this.noteManager.Colour(reminder, userId, noteId);
+                if (ReminderData)
+                {
+                    return this.Ok(new { success = true, message = "Reminder Updated Successfully", result = reminder });
+                }
+                return this.Ok(new { success = true, message = "Reminder Not Updated Successfully Please Enter Valid Note Id" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, message = ex.Message });
+            }
+        }
     }
 }
