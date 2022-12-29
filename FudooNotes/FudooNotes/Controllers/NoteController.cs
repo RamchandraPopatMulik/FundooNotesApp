@@ -55,5 +55,99 @@ namespace FudooNotes.Controllers
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
         }
+        [HttpDelete]
+        [Route("fundoo/delete")]
+        public IActionResult Delete(int userId, int noteId)
+        {
+            try
+            {
+                bool userData1 = this.noteManager.Delete(userId,noteId);
+                if (userData1)
+                {
+                    return this.Ok(new { success = true, message = "Delete Successful", result = userData1 });
+                }
+                return this.Ok(new { success = true, message = "Enter Valid EmailId" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, meassage = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("fundoo/update")]
+        public IActionResult Update(UpdateNoteModel upadteModel,int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                UpdateNoteModel userData1 = this.noteManager.UpdateNote(upadteModel,userId, noteId);
+                if (userData1 != null)
+                {
+                    return this.Ok(new { success = true, message = "Update Successful", result = userData1 });
+                }
+                return this.Ok(new { success = true, message = "Enter Valid NoteId" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, meassage = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("fundoo/pinNote")]
+        public IActionResult PinNotes(bool pin,int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool userData1 = this.noteManager.PinNotes(pin,userId,noteId);
+                if (userData1)
+                {
+                    return this.Ok(new { success = true, message = "PinNote Opertion Successful", result = userData1 });
+                }
+                return this.Ok(new { success = true, message = "PinNote Not Successful" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, meassage = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("fundoo/archieve")]
+        public IActionResult Archieve(bool arch, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool userData1 = this.noteManager.Archieve(arch, userId, noteId);
+                if (userData1)
+                {
+                    return this.Ok(new { success = true, message = "PinNote Opertion Successful", result = userData1 });
+                }
+                return this.Ok(new { success = true, message = "PinNote Operation UnSuccessful" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, meassage = ex.Message });
+            }
+        }
+        [HttpPut]
+        [Route("fundoo/trash")]
+        public IActionResult Trash(bool trash, int noteId)
+        {
+            try
+            {
+                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
+                bool userData1 = this.noteManager.Trash(trash, userId, noteId);
+                if (userData1)
+                {
+                    return this.Ok(new { success = true, message = "Trash Opertion Successful", result = userData1 });
+                }
+                return this.Ok(new { success = true, message = "Trash Opearation UnSuccessful" });
+            }
+            catch (Exception ex)
+            {
+                return this.BadRequest(new { success = false, meassage = ex.Message });
+            }
+        }
     }
 }

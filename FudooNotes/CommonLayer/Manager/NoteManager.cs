@@ -40,5 +40,61 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+        public bool Delete(int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.Delete(userId,noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public UpdateNoteModel UpdateNote(UpdateNoteModel updateNoteModel, int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.UpdateNote(updateNoteModel,userId, noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public bool PinNotes(bool pin, int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.PinNotes(pin, userId, noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public bool Archieve(bool arch, int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.Archieve(arch, userId, noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public bool Trash(bool trash, int userId, int noteId)
+        {
+            try
+            {
+                return this.noteRepository.Archieve(trash, userId, noteId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

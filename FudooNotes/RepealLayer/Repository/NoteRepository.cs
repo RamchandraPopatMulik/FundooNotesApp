@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FundooRepository.Interface;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace FundooRepository.Repository
 {
@@ -95,13 +96,214 @@ namespace FundooRepository.Repository
                             noteModel.trash = sqlDataReader.IsDBNull("trash") ? false : sqlDataReader.GetBoolean("trash");
                             noteModel.created = sqlDataReader.IsDBNull("created") ? DateTime.MinValue : sqlDataReader.GetDateTime("created");
                             noteModel.modified = sqlDataReader.IsDBNull("modified") ? DateTime.MinValue : sqlDataReader.GetDateTime("modified");
-                            noteModel.userId = sqlDataReader.IsDBNull("userId") ? 0 : sqlDataReader.GetInt32("userId");
+                            noteModel.noteId = sqlDataReader.IsDBNull("noteId") ? 0 : sqlDataReader.GetInt32("noteId");
                         }
                         return noteModel;     
                     }
                     else
                     {
                         return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        public bool Delete(int userId,int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                NoteModel noteModel = new NoteModel();
+                using (connection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("SPDeleteNotes", connection);
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    sqlCommand.Parameters.AddWithValue("@userId", userId);
+                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
+
+                    connection.Open();
+                    int store = sqlCommand.ExecuteNonQuery();
+
+                    if (store >= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        public UpdateNoteModel UpdateNote(UpdateNoteModel updateNoteModel,int userId,int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("sp_update", connection);
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@userId", userId);
+                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
+                    sqlCommand.Parameters.AddWithValue("@title", updateNoteModel.title);
+                    sqlCommand.Parameters.AddWithValue("@discription", updateNoteModel.discription);
+                    sqlCommand.Parameters.AddWithValue("@reminder", updateNoteModel.reminder);
+                    sqlCommand.Parameters.AddWithValue("@colour", updateNoteModel.colour);
+                    sqlCommand.Parameters.AddWithValue("@image", updateNoteModel.image);
+                    sqlCommand.Parameters.AddWithValue("@archive", updateNoteModel.archive);
+                    sqlCommand.Parameters.AddWithValue("@pinNotes", updateNoteModel.pinNotes);
+                    sqlCommand.Parameters.AddWithValue("@trash", updateNoteModel.trash);
+                    sqlCommand.Parameters.AddWithValue("@modified", DateTime.UtcNow);
+
+                    connection.Open();
+                    int store = sqlCommand.ExecuteNonQuery();
+
+                    if (store >= 1)
+                    {
+                        return updateNoteModel;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+        }
+        public bool PinNotes(bool pin,int userId,int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("sp_PinNote", connection);
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@userId", userId);
+                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
+                    sqlCommand.Parameters.AddWithValue("@pinNotes", pin);
+                   
+
+                    connection.Open();
+                    int store = sqlCommand.ExecuteNonQuery();
+
+                    if (store >= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        public bool Archieve(bool arch, int userId, int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("sp_Archieve", connection);
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@userId", userId);
+                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
+                    sqlCommand.Parameters.AddWithValue("@archive", arch);
+
+
+                    connection.Open();
+                    int store = sqlCommand.ExecuteNonQuery();
+
+                    if (store >= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+        public bool Trash(bool trash, int userId, int noteId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("sp_Trash", connection);
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@userId", userId);
+                    sqlCommand.Parameters.AddWithValue("@noteId", noteId);
+                    sqlCommand.Parameters.AddWithValue("@trash", trash);
+
+
+                    connection.Open();
+                    int store = sqlCommand.ExecuteNonQuery();
+
+                    if (store >= 1)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 }
             }
