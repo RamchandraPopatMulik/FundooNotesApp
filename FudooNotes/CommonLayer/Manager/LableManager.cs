@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace FundooManager.Manager
 {
-    public class LabelManager : ILabelManager
+    public class LableManager : ILableManager
     {
-        private readonly LabelRepository labelRepository;
+        private readonly ILableRepository labelRepository;
 
-        public LabelManager(LabelRepository labelRepository)
+        public LableManager(ILableRepository labelRepository)
         {
             this.labelRepository = labelRepository;
         }
@@ -29,7 +29,7 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
-        public List<LabelModel> GetLable(int noteId)
+        public List<LableModel> GetLable(int noteId)
         {
             try
             {

@@ -9,10 +9,10 @@ namespace FudooNotes.Controllers
     [Route("fundoo/[controller]")]
     [ApiController]
     [Authorize]
-    public class LabelController : ControllerBase
+    public class LableController : ControllerBase
     {
-        private readonly ILabelManager labelManager;
-        public LabelController(ILabelManager labelManager)
+        private readonly ILableManager labelManager;
+        public LableController(ILableManager labelManager)
         {
             this.labelManager = labelManager;
         }
@@ -23,14 +23,14 @@ namespace FudooNotes.Controllers
             try
             {
                 int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
-                var userData = this.labelManager.AddLable(lable,noteId, userId);
+                var userData = this.labelManager.AddLable(lable, noteId, userId);
                 if (userData)
                 {
                     return this.Ok(new { success = true, message = "Add Label Successful", result = userData });
                 }
                 return this.Ok(new { success = true, message = "Please Enter Valid NoteId" });
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
@@ -41,7 +41,7 @@ namespace FudooNotes.Controllers
         {
             try
             {
-                List<LabelModel> userData = this.labelManager.GetLable(noteId);
+                List<LableModel> userData = this.labelManager.GetLable(noteId);
                 if (userData != null)
                 {
                     return this.Ok(new { success = true, message = "Add Label Successful", result = userData });
@@ -91,3 +91,4 @@ namespace FudooNotes.Controllers
         }
     }
 }
+
