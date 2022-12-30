@@ -100,6 +100,7 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+<<<<<<< HEAD
 
         public bool PinNotes(bool pin, int userId, int noteId)
         {
@@ -134,6 +135,8 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
+=======
+>>>>>>> 2_CreateNote
         public bool Colour(string colour, int userId, int noteId)
         {
             try

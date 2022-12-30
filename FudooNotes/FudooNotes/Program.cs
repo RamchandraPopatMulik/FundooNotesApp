@@ -21,6 +21,8 @@ builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<INoteManager, NoteManager>();
 builder.Services.AddTransient<INoteRepository, NoteRepository>();
+builder.Services.AddTransient<ILabelManager, LabelManager>();
+builder.Services.AddTransient<ILableRepository, LabelRepository> ();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
