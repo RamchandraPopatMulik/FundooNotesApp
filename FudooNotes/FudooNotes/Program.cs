@@ -17,12 +17,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+
 builder.Services.AddTransient<IUserManager, UserManager>();
 builder.Services.AddTransient<IUserRepository, UserRepository>();
 builder.Services.AddTransient<INoteManager, NoteManager>();
 builder.Services.AddTransient<INoteRepository, NoteRepository>();
-builder.Services.AddTransient<ILabelManager, LabelManager>();
-builder.Services.AddTransient<ILableRepository, LabelRepository> ();
+builder.Services.AddTransient<ILableManager, LableManager>();
+builder.Services.AddTransient<ILableRepository, LableRepository>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

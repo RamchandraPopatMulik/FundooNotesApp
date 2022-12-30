@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FundooModel
 {
-    public class LabelModel
+    public class LableModel
     {
         public int LabelId { get; set; }
         public string LabelName { get; set; }   

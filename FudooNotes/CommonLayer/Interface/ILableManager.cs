@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace FundooManager.Interface
 {
-    public interface ILabelManager
+    public interface ILableManager
     {
         public bool AddLable(string lable, int noteId, int userId);
-        public List<LabelModel> GetLable(int noteId);
+        public List<LableModel> GetLable(int noteId);
         public bool UpdateLabel(string nlable, int LabelId);
         public bool DeleteLabel(int LabelId);
     }

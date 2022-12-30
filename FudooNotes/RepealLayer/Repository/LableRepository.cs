@@ -13,11 +13,11 @@ using BussinessLayer;
 
 namespace FundooRepository.Repository
 {
-    public class LabelRepository : ILableRepository
+    public class LableRepository : ILableRepository
     {
         string connectionString;
 
-        public LabelRepository(IConfiguration configuration)
+        public LableRepository(IConfiguration configuration)
         {
             connectionString = configuration.GetConnectionString("UserDbConnection");
         }
@@ -57,13 +57,13 @@ namespace FundooRepository.Repository
                 connection.Close();
             }
         }
-        public List <LabelModel> GetLabels(int noteId)
+        public List <LableModel> GetLabels(int noteId)
         {
 
             SqlConnection connection = new SqlConnection(connectionString);
             try
             {
-                List<LabelModel> list = new List<LabelModel>();
+                List<LableModel> list = new List<LableModel>();
                 using (connection)
                 {
                     SqlCommand sqlCommand = new SqlCommand("sp_GetLabels", connection);
@@ -78,12 +78,12 @@ namespace FundooRepository.Repository
                     {
                         while (reader.Read())
                         {
-                            LabelModel labelModel = new LabelModel()
+                            LableModel labelModel = new LableModel()
                             {
-                                LabelId = reader.IsDBNull(" LabelId") ? 0 : reader.GetInt32(" LabelId"),
+                                LabelId = reader.IsDBNull("LabelId") ? 0 : reader.GetInt32("LabelId"),
                                 LabelName = reader.IsDBNull("LabelName") ? String.Empty : reader.GetString("LabelName"),
-                                noteId = reader.IsDBNull("  noteId") ? 0 : reader.GetInt32("noteId"),
-                                userId = reader.IsDBNull(" userId") ? 0 : reader.GetInt32(" userId")
+                                noteId = reader.IsDBNull("noteId") ? 0 : reader.GetInt32("noteId"),
+                                userId = reader.IsDBNull("userId") ? 0 : reader.GetInt32("userId")
                             };
                             list.Add(labelModel);
                         }
@@ -143,7 +143,7 @@ namespace FundooRepository.Repository
             {
                 using (connection)
                 {
-                    SqlCommand sqlCommand = new SqlCommand("sp_UpdateLabel", connection);
+                    SqlCommand sqlCommand = new SqlCommand("sp_DeleteLabels", connection);
 
                     sqlCommand.CommandType = CommandType.StoredProcedure;
                     sqlCommand.Parameters.AddWithValue("@LabelId", LabelId);
