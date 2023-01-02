@@ -30,7 +30,7 @@ namespace FundooRepository.Repository
         public static string EncryptPass(string password)
         {
             byte[] encode = new byte[password.Length];
-            encode = Encoding.UTF8.GetBytes(password);
+            encode = Encoding.UTF8.GetBytes(password);   
             return Convert.ToBase64String(encode);
         }
         public string GenerateJWTToken(string emailId,int userId)
@@ -45,7 +45,6 @@ namespace FundooRepository.Repository
                     {
                         new Claim(ClaimTypes.Email, emailId),
                         new Claim("userId", userId.ToString()),
-
                     }),
                     Expires = DateTime.UtcNow.AddHours(1),
                     SigningCredentials = new SigningCredentials(TokenKey,SecurityAlgorithms.HmacSha256Signature)

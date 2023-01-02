@@ -24,6 +24,10 @@ builder.Services.AddTransient<INoteManager, NoteManager>();
 builder.Services.AddTransient<INoteRepository, NoteRepository>();
 builder.Services.AddTransient<ILableManager, LableManager>();
 builder.Services.AddTransient<ILableRepository, LableRepository>();
+builder.Services.AddTransient<ICollabraterManager, CollabraterManager> ();
+builder.Services.AddTransient<ICollabraterRepository, CollabraterRepository> ();
+
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
