@@ -47,9 +47,9 @@ namespace FudooNotes.Controllers
                 bool userData = this.collabraterManager.DeleteCollabrater(collabraterId);
                 if (userData != null)
                 {
-                    return this.Ok(new { success = true, message = "Delete Collabrater Successful", result = userData });
+                    return this.Ok(new { success = true, message = " Delete Collabrater Successful ", result = userData });
                 }
-                return this.Ok(new { success = true, message = "Please Enter Valid CollabraterId !!!" });
+                return this.Ok(new { success = true, message = " Please Enter Valid CollabraterId !!! " });
             }
             catch (Exception ex)
             {
