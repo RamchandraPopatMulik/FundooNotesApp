@@ -96,7 +96,7 @@ namespace FundooRepository.Repository
                             noteModel.trash = sqlDataReader.IsDBNull("trash") ? false : sqlDataReader.GetBoolean("trash");
                             noteModel.created = sqlDataReader.IsDBNull("created") ? DateTime.MinValue : sqlDataReader.GetDateTime("created");
                             noteModel.modified = sqlDataReader.IsDBNull("modified") ? DateTime.MinValue : sqlDataReader.GetDateTime("modified");
-                            noteModel.userId = sqlDataReader.IsDBNull("userId") ? 0 : sqlDataReader.GetInt32("userId");
+                            noteModel.noteId = sqlDataReader.IsDBNull("noteId") ? 0 : sqlDataReader.GetInt32("noteId");
                         }
                         return noteModel;     
                     }
