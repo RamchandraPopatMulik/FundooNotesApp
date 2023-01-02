@@ -29,7 +29,7 @@ namespace FudooNotes.Controllers
                 bool userData = this.collabraterManager.AddCollabrater(noteId,userId,collabraterEmail);
                 if (userData != null)
                 {
-                    return this.Ok(new { success = true, message = "Add Collbrater Successful", result = userData });
+                    return this.Ok(new { success = true, message = "  Add Collbrater Successful  ", result = userData });
                 }
                 return this.Ok(new { success = true, message = "Please Enter Valid NoteId" });
             }
