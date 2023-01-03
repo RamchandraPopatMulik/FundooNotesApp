@@ -9,11 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FundooRepository.Interface;
-<<<<<<< HEAD
 using static System.Formats.Asn1.AsnWriter;
-=======
 using System.Security.Principal;
->>>>>>> 2_CreateNote
+
 
 namespace FundooRepository.Repository
 {
@@ -378,11 +376,6 @@ namespace FundooRepository.Repository
                 }
             }
         }
-<<<<<<< HEAD
-
-=======
-      
->>>>>>> 2_CreateNote
     }
 }
 

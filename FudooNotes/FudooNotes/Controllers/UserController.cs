@@ -11,11 +11,12 @@ namespace FudooNotes.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserManager userManager;
+        private readonly ILogger<UserController> logger1;
 
-        public UserController(IUserManager userManager)
+        public UserController(IUserManager userManager, ILogger<UserController> logger1)
         {
             this.userManager = userManager;
-           
+            this.logger1 = logger1;
         }
         [HttpPost]
         [Route("fundoo/register")]
@@ -26,6 +27,7 @@ namespace FudooNotes.Controllers
                 UserModel userData = this.userManager.Register(userModel);
                 if(userData != null)
                 {
+                    logger1.LogInformation("Register");
                     return this.Ok(new { success = true, message = "Registartion Successful" , result= userData});
                 }
                 return this.Ok(new { success = true, message = "User Already Registerd" });
@@ -42,6 +44,7 @@ namespace FudooNotes.Controllers
             try
             {
                 var userData = this.userManager.Login(userLogin);
+                logger1.LogInformation("Login");
                 if (userData != null)
                 {
                     return this.Ok(new { success = true, message = "Login Successful", result = userData });

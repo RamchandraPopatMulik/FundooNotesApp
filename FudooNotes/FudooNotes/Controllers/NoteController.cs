@@ -12,10 +12,11 @@ namespace FudooNotes.Controllers
     public class NoteController : ControllerBase
     {
         private readonly INoteManager noteManager;
-
-        public NoteController(INoteManager noteManager)
+        private readonly ILogger<NoteController> logger1;
+        public NoteController(INoteManager noteManager, ILogger<NoteController> logger1)
         {
             this.noteManager = noteManager;
+            this.logger1 = logger1;
         }
         [HttpPost]
         [Route("fundoo/create")]
@@ -27,6 +28,7 @@ namespace FudooNotes.Controllers
                 var userData = this.noteManager.CreateNode(noteModel,userId);
                 if (userData != null)
                 {
+                    logger1.LogInformation("Hello,CreateNote");
                     return this.Ok(new { success = true, message = "Note Create Successful", result = userData });
                 }
                 return this.Ok(new { success = true, message = "Note Title Already Exists !!!" });
@@ -44,6 +46,7 @@ namespace FudooNotes.Controllers
             {
                 int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
                 NoteModel userData1 = this.noteManager.DisplayNodes(userId);
+                logger1.LogInformation("DisplayNote");
                 if (userData1 != null)
                 {
                     return this.Ok(new { success = true, message = "Display Sucessful", result = userData1 });
@@ -118,7 +121,7 @@ namespace FudooNotes.Controllers
             try
             {
                 int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
-                bool pin = this.noteManager.PinNotes(pinNote, userId, noteId);
+                bool pin = this.noteManager.PinNote(pinNote, userId, noteId);
                 if (pin)
                 {
                     return this.Ok(new { success = true, message = "PinNote Operation is Successfully", result = pin });
@@ -137,7 +140,7 @@ namespace FudooNotes.Controllers
             try
             {
                 int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
-                bool archive = this.noteManager.Archieve(archiveNote, userId, noteId);
+                bool archive = this.noteManager.ArchiveNote(archiveNote, userId, noteId);
                 if (archive)
                 {
                     return this.Ok(new { success = true, message = "Archive Operation is Successfully", result = archive });
@@ -156,7 +159,7 @@ namespace FudooNotes.Controllers
             try
             {
                 int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
-                bool trash = this.noteManager.Trash(trashNote, userId, noteId);
+                bool trash = this.noteManager.TrashNote(trashNote, userId, noteId);
                 if (trash)
                 {
                     return this.Ok(new { success = true, message = "Trash Operation is Successfully", result = trash });
@@ -205,44 +208,6 @@ namespace FudooNotes.Controllers
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
-        }
-        [HttpPut]
-        [Route("NoteColour")]
-        public IActionResult Colour(string colour, int noteId)
-        {
-            try
-            {
-                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
-                bool Colour = this.noteManager.Colour(colour, userId, noteId);
-                if (Colour)
-                {
-                    return this.Ok(new { success = true, message = "Colour Updated Successfully", result = colour });
-                }
-                return this.Ok(new { success = true, message = "Colour Not Updated Successfully Please Enter Valid Note Id" });
-            }
-            catch (Exception ex)
-            {
-                return this.BadRequest(new { success = false, message = ex.Message });
-            }
-        }
-        [HttpPut]
-        [Route("NoteReminder")]
-        public IActionResult Reminder(string reminder, int noteId)
-        {
-            try
-            {
-                int userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "userId").Value);
-                bool ReminderData = this.noteManager.Colour(reminder, userId, noteId);
-                if (ReminderData)
-                {
-                    return this.Ok(new { success = true, message = "Reminder Updated Successfully", result = reminder });
-                }
-                return this.Ok(new { success = true, message = "Reminder Not Updated Successfully Please Enter Valid Note Id" });
-            }
-            catch (Exception ex)
-            {
-                return this.BadRequest(new { success = false, message = ex.Message });
-            }
-        }
+        }  
     }
 }

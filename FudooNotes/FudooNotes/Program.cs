@@ -9,93 +9,115 @@ using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using NLog;
 using System.Text;
+using NLog.Web;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-
-builder.Services.AddTransient<IUserManager, UserManager>();
-builder.Services.AddTransient<IUserRepository, UserRepository>();
-builder.Services.AddTransient<INoteManager, NoteManager>();
-builder.Services.AddTransient<INoteRepository, NoteRepository>();
-builder.Services.AddTransient<ILableManager, LableManager>();
-builder.Services.AddTransient<ILableRepository, LableRepository>();
-builder.Services.AddTransient<ICollabraterManager, CollabraterManager> ();
-builder.Services.AddTransient<ICollabraterRepository, CollabraterRepository> ();
-
-
-
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
+try
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Welcome to Fundoo Notes" });
-    var jwtSecurityScheme = new OpenApiSecurityScheme
+    var builder = WebApplication.CreateBuilder(args);
+
+    // Add services to the container.
+
+    builder.Services.AddControllers();
+   
+    builder.Services.AddTransient<IUserManager, UserManager>();
+    builder.Services.AddTransient<IUserRepository, UserRepository>();
+    builder.Services.AddTransient<INoteManager, NoteManager>();
+    builder.Services.AddTransient<INoteRepository, NoteRepository>();
+    builder.Services.AddTransient<ILableManager, LableManager>();
+    builder.Services.AddTransient<ILableRepository, LableRepository>();
+    builder.Services.AddTransient<ICollabraterManager, CollabraterManager>();
+    builder.Services.AddTransient<ICollabraterRepository, CollabraterRepository>();
+
+
+
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(c =>
     {
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        Name = "JWT Authentication",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.Http,
-        Description = "enter JWT bearer token on textbox below !",
-        Reference = new OpenApiReference
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Welcome to Fundoo Notes" });
+        var jwtSecurityScheme = new OpenApiSecurityScheme
         {
-            Id = JwtBearerDefaults.AuthenticationScheme,
-            Type = ReferenceType.SecurityScheme
-        }
-    };
-    c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                         {
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Name = "JWT Authentication",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.Http,
+            Description = "enter JWT bearer token on textbox below !",
+            Reference = new OpenApiReference
+            {
+                Id = JwtBearerDefaults.AuthenticationScheme,
+                Type = ReferenceType.SecurityScheme
+            }
+        };
+        c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                             {
                           { jwtSecurityScheme,Array.Empty<string>() }
-                         });
-});
-var tokenKey = builder.Configuration.GetValue<string>("Jwt:Key");
-var Key = Encoding .ASCII.GetBytes(tokenKey);
-builder.Services.AddAuthentication(x =>
-{
-    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x=>
-{
-    x.RequireHttpsMetadata = false;
-    x.SaveToken = true;
-    x.TokenValidationParameters = new TokenValidationParameters
+                             });
+    });
+    var tokenKey = builder.Configuration.GetValue<string>("Jwt:Key");
+    var Key = Encoding.ASCII.GetBytes(tokenKey);
+    builder.Services.AddAuthentication(x =>
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Key),
-        ValidateIssuer = false,
-        ValidateAudience = false,
-    };
-});
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    }).AddJwtBearer(x =>
+    {
+        x.RequireHttpsMetadata = false;
+        x.SaveToken = true;
+        x.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+        };
+    });
 
-var app = builder.Build();
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
+    }
+    app.UseAuthentication();
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.UseRouting();
+    app.UseAuthorization();
+
+
+    app.MapControllers();
+    app.MapControllerRoute(
+        name: "Admin",
+        pattern: "{area : exists}/{controller=Home}/{action=index}/{id?}");
+
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=index}/{id?}");
+
+    app.Run();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-
-app.MapControllers();
-app.MapControllerRoute(
-    name :"Admin",
-    pattern : "{area : exists}/{controller=Home}/{action=index}/{id?}");
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=index}/{id?}");
-
-app.Run();
+catch(Exception ex)
+{
+    logger.Error(ex,"Stopeed Program Becuse od Exception");
+}
+finally
+{
+    NLog.LogManager.Shutdown();
+}

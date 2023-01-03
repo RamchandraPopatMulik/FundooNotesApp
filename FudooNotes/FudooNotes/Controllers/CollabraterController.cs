@@ -1,5 +1,6 @@
 ﻿using FundooManager.Interface;
 using FundooModel;
+using FundooRepository.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Http;
@@ -14,10 +15,13 @@ namespace FudooNotes.Controllers
     public class CollabraterController : ControllerBase
     {
         private readonly ICollabraterManager collabraterManager;
+        private readonly ILogger<CollabraterController> logger1;
 
-        public CollabraterController(ICollabraterManager collabraterManager)
+        public CollabraterController(ICollabraterManager collabraterManager,ILogger<CollabraterController> logger1)
         {
             this.collabraterManager=collabraterManager;
+            this.logger1 = logger1;
+            logger1.LogDebug("NLog Injected into CollabraterController");
         }
         [HttpPost]
         [Route("fundoo/AddCollabrater")]
@@ -29,6 +33,7 @@ namespace FudooNotes.Controllers
                 bool userData = this.collabraterManager.AddCollabrater(noteId,userId,collabraterEmail);
                 if (userData != null)
                 {
+                    logger1.LogInformation("Hello,Add Collabrater ");
                     return this.Ok(new { success = true, message = "  Add Collbrater Successful  ", result = userData });
                 }
                 return this.Ok(new { success = true, message = "Please Enter Valid NoteId" });
@@ -45,6 +50,7 @@ namespace FudooNotes.Controllers
             try
             {
                 bool userData = this.collabraterManager.DeleteCollabrater(collabraterId);
+                logger1.LogInformation("Hello,DeleteCollabrater");
                 if (userData != null)
                 {
                     return this.Ok(new { success = true, message = " Delete Collabrater Successful ", result = userData });
@@ -65,6 +71,7 @@ namespace FudooNotes.Controllers
                 List<CollabraterModel> userData = this.collabraterManager.RetriveCollabrater(noteId);
                 if (userData != null)
                 {
+                    logger1.LogInformation("Hello,Retrive Collabrater");
                     return this.Ok(new { success = true, message = "Retrive  Collabrater Successful", result = userData });
                 }
                 return this.Ok(new { success = true, message = "Please Enter Valid NoteId !!!" });

@@ -100,43 +100,6 @@ namespace FundooManager.Manager
                 throw new Exception(ex.Message);
             }
         }
-<<<<<<< HEAD
-
-        public bool PinNotes(bool pin, int userId, int noteId)
-        {
-            try
-            {
-                return this.noteRepository.PinNote(pin, userId, noteId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public bool Archieve(bool arch, int userId, int noteId)
-        {
-            try
-            {
-                return this.noteRepository.ArchiveNote(arch, userId, noteId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-        public bool Trash(bool trash, int userId, int noteId)
-        {
-            try
-            {
-                return this.noteRepository.TrashNote(trash, userId, noteId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-        }
-=======
->>>>>>> 2_CreateNote
         public bool Colour(string colour, int userId, int noteId)
         {
             try
