@@ -3,6 +3,7 @@ using FundooManager.Interface;
 using FundooModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StackExchange.Redis;
 
 namespace FudooNotes.Controllers
 {
@@ -47,6 +48,18 @@ namespace FudooNotes.Controllers
                 logger1.LogInformation("Login");
                 if (userData != null)
                 {
+                    ConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                    IDatabase database = connectionMultiplexer.GetDatabase();
+                    string firstName = database.StringGet("firstName");
+                    string lastName = database.StringGet("lastName");
+                    int userId = Convert.ToInt32(database.StringGet("userId"));
+                    UserModel userModel = new UserModel()
+                    {
+                        userId = userId,
+                        firstName =firstName,
+                        lastName=lastName,
+                        emailId = userLogin.emailId
+                    };
                     return this.Ok(new { success = true, message = "Login Successful", result = userData });
                 }
                 return this.Ok(new { success = true, message = "Enter Valid EmailId And Password" });

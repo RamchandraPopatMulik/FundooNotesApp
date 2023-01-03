@@ -3,6 +3,7 @@ using FundooModel;
 using FundooRepository.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -101,6 +102,9 @@ namespace FundooRepository.Repository
                 UserModel userModel = new UserModel();
                 using (connection)
                 {
+                    ConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
+                    IDatabase database = connectionMultiplexer.GetDatabase();
+
                     SqlCommand sqlCommand = new SqlCommand("sp_login", connection);
                     
                     sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -116,7 +120,12 @@ namespace FundooRepository.Repository
                         while (sqlDataReader.Read())
                         {
                             userModel.userId = sqlDataReader.IsDBNull("userId") ? 0 : sqlDataReader.GetInt32("userId");
+                            userModel.firstName = sqlDataReader.IsDBNull("firstName") ? String.Empty : sqlDataReader.GetString("firstName");
+                            userModel.lastName = sqlDataReader.IsDBNull("lastName") ? string.Empty : sqlDataReader.GetString("lastName");
                         }
+                        database.StringSet(key:"userId", userModel.userId.ToString());
+                        database.StringSet(key:"firstName", userModel.firstName.ToString());
+                        database.StringSet(key: "lastName", userModel.lastName.ToString());
                         var token = GenerateJWTToken(userLogin.emailId, userModel.userId);
                         return token;
                     }
