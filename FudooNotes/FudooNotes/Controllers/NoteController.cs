@@ -33,7 +33,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Note Title Already Exists !!!" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
@@ -53,7 +53,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Enter Valid UserId" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
@@ -71,7 +71,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Enter Valid EmailId" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
@@ -90,7 +90,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Note Not Updated" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
@@ -109,7 +109,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Note Not Deleted" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
@@ -128,7 +128,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Pin Operation is Unsuccessfully" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
@@ -147,7 +147,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Archive Operation is Unsuccessfully" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
@@ -166,7 +166,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Trash Operation is Unsuccessfully" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
@@ -185,7 +185,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Colour Not Updated Successfully Please Enter Valid Note Id" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }
@@ -204,7 +204,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Reminder Not Updated Successfully Please Enter Valid Note Id" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, message = ex.Message });
             }

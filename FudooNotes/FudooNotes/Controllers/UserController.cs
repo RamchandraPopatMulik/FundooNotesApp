@@ -33,7 +33,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "User Already Registerd" });
             }
-            catch(Exception ex)
+            catch(ApplicationException ex)
             {
                 return this.BadRequest(new { success =false, meassage =ex.Message});
             }
@@ -64,7 +64,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Enter Valid EmailId And Password" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
@@ -82,7 +82,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Enter Valid EmailId" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
@@ -103,7 +103,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "User Already Registerd" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }

@@ -38,7 +38,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Please Enter Valid NoteId" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
@@ -57,7 +57,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = " Please Enter Valid CollabraterId !!! " });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
@@ -76,7 +76,7 @@ namespace FudooNotes.Controllers
                 }
                 return this.Ok(new { success = true, message = "Please Enter Valid NoteId !!!" });
             }
-            catch (Exception ex)
+            catch (ApplicationException ex)
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
