@@ -29,7 +29,7 @@ namespace FundooManager.Model
                 throw new Exception(ex.Message);
             }
         }
-        public string Login(UserLogin userLogin)
+        public UserModel Login(UserLogin userLogin)
         {
             try
             {
@@ -62,6 +62,27 @@ namespace FundooManager.Model
                 throw new Exception(ex.Message);
             }
         }
-
+        public UserModel GetData(UserModel Model, int userId)
+        {
+            try
+            {
+                return this.userRepository.GetData(Model,userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public string GenerateJWTToken(string emailId, int userId)
+        {
+            try
+            {
+                return this.userRepository.GenerateJWTToken(emailId, userId);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

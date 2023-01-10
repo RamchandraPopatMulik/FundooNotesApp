@@ -22,7 +22,12 @@ try
     // Add services to the container.
 
     builder.Services.AddControllers();
-   
+    builder.Services.AddSession( options => 
+    {
+        options.IOTimeout = TimeSpan.FromSeconds(50);
+    }
+        );
+    builder.Services.AddDistributedMemoryCache();
     builder.Services.AddTransient<IUserManager, UserManager>();
     builder.Services.AddTransient<IUserRepository, UserRepository>();
     builder.Services.AddTransient<INoteManager, NoteManager>();
@@ -97,6 +102,7 @@ try
     }
     app.UseAuthentication();
     app.UseHttpsRedirection();
+    app.UseSession();
     app.UseStaticFiles();
     app.UseRouting();
     app.UseAuthorization();

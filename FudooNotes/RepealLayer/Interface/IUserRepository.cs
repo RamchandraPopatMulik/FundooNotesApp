@@ -10,13 +10,16 @@ namespace FundooRepository.Interface
 {
     public interface IUserRepository
     {
+        public string GenerateJWTToken(string emailId, int userId);
         public UserModel Register(UserModel userModel);
 
-        public string Login(UserLogin userLogin);
+        public UserModel Login(UserLogin userLogin);
 
         public string Forgot(string emailId);
 
         public bool ResetPass(UserResetPassWordModel userResetPassWordModel, string emailId);
+
+        public UserModel GetData(UserModel Model, int userId);
 
     }
 }

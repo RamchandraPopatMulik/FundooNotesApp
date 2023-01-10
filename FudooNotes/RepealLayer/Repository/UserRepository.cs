@@ -3,6 +3,7 @@ using FundooModel;
 using FundooRepository.Interface;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using NLog.Web.LayoutRenderers;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -94,7 +95,7 @@ namespace FundooRepository.Repository
                 connection.Close();
             }
         }
-        public string Login (UserLogin userLogin)
+        public UserModel Login (UserLogin userLogin)
         {
             SqlConnection connection = new SqlConnection(connectionString);
             try
@@ -122,12 +123,14 @@ namespace FundooRepository.Repository
                             userModel.userId = sqlDataReader.IsDBNull("userId") ? 0 : sqlDataReader.GetInt32("userId");
                             userModel.firstName = sqlDataReader.IsDBNull("firstName") ? String.Empty : sqlDataReader.GetString("firstName");
                             userModel.lastName = sqlDataReader.IsDBNull("lastName") ? string.Empty : sqlDataReader.GetString("lastName");
+                            userModel.emailId = sqlDataReader.IsDBNull("emailId") ? string.Empty : sqlDataReader.GetString("emailId");
+
                         }
                         database.StringSet(key:"userId", userModel.userId.ToString());
                         database.StringSet(key:"firstName", userModel.firstName.ToString());
                         database.StringSet(key: "lastName", userModel.lastName.ToString());
-                        var token = GenerateJWTToken(userLogin.emailId, userModel.userId);
-                        return token;
+                        //var token = GenerateJWTToken(userLogin.emailId, userModel.userId);
+                        return userModel;
                     }
                     else
                     {
@@ -219,6 +222,47 @@ namespace FundooRepository.Repository
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+        public UserModel GetData(UserModel Model,int userId)
+        {
+            SqlConnection connection = new SqlConnection(connectionString);
+            try
+            {
+                using (connection)
+                {
+                    SqlCommand sqlCommand = new SqlCommand("sp_GateData", connection);
+
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    sqlCommand.Parameters.AddWithValue("@userId", Model.userId);
+                    //sqlCommand.Parameters.AddWithValue("@lastName", Model.lastName);
+                    //sqlCommand.Parameters.AddWithValue("@emailId", Model.emailId);
+
+                    connection.Open();
+                    SqlDataReader sqlDataReader = sqlCommand.ExecuteReader();
+                    if (sqlDataReader.HasRows)
+                    {
+                        while (sqlDataReader.Read())
+                        {
+                            Model.firstName = sqlDataReader.IsDBNull("firstName") ? String.Empty : sqlDataReader.GetString("firstName");
+                            Model.lastName = sqlDataReader.IsDBNull("lastName") ? String.Empty : sqlDataReader.GetString("lastName");
+                            Model.emailId = sqlDataReader.IsDBNull("emailId") ? String.Empty : sqlDataReader.GetString("emailId");
+                        }
+                        return Model;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                connection.Close();
             }
         }
     }

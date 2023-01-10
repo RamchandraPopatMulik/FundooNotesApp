@@ -140,9 +140,9 @@ namespace FundooRepository.Repository
                     command.Parameters.AddWithValue("@modified", updateNote.modified);
 
                     connection.Open();
-                    int deleteOrNot = command.ExecuteNonQuery();
+                    int UpdateOrNot = command.ExecuteNonQuery();
 
-                    if (deleteOrNot >= 1)
+                    if (UpdateOrNot >= 1)
                     {
                         return updateNote;
                     }

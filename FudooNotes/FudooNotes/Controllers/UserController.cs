@@ -44,10 +44,16 @@ namespace FudooNotes.Controllers
         {
             try
             {
-                var userData = this.userManager.Login(userLogin);
+                UserModel userData = this.userManager.Login(userLogin);
                 logger1.LogInformation("Login");
                 if (userData != null)
                 {
+                    string logintoken = this.userManager.GenerateJWTToken(userData.emailId,userData.userId);
+                    SetSession(userData);
+                    string name = HttpContext.Session.GetString("UserName");
+                    string Email = HttpContext.Session.GetString("UserEmail");
+                    var UserId = HttpContext.Session.GetInt32("UserId");
+
                     ConnectionMultiplexer connectionMultiplexer = ConnectionMultiplexer.Connect("127.0.0.1:6379");
                     IDatabase database = connectionMultiplexer.GetDatabase();
                     string firstName = database.StringGet("firstName");
@@ -60,7 +66,7 @@ namespace FudooNotes.Controllers
                         lastName=lastName,
                         emailId = userLogin.emailId
                     };
-                    return this.Ok(new { success = true, message = "Login Successful", result = userData });
+                    return this.Ok(new { success = true, message = "Login Successful", result = logintoken });
                 }
                 return this.Ok(new { success = true, message = "Enter Valid EmailId And Password" });
             }
@@ -107,6 +113,31 @@ namespace FudooNotes.Controllers
             {
                 return this.BadRequest(new { success = false, meassage = ex.Message });
             }
+        }
+        [HttpGet]
+        [Route("fundoo/getdata")]
+        public IActionResult GetData(UserModel Model, int userId)
+        {
+            try
+            {
+                var userData1 = this.userManager.GetData(Model, userId);
+                if (userData1 != null)
+                {
+                    return this.Ok(new { success = true, message = "Gate Data Successful", result = userData1 });
+                }
+                return this.Ok(new { success = true, message = "Gate Data Not Successful" });
+            }
+            catch (ApplicationException ex)
+            {
+                return this.BadRequest(new { success = false, meassage = ex.Message });
+            }
+        }
+
+        private void SetSession(UserModel user)
+        {
+            this.HttpContext.Session.SetString("UserName",user.firstName+"   "+user.lastName);
+            this.HttpContext.Session.SetString("UserEmail",user.emailId);
+            this.HttpContext.Session.SetInt32("UserId",user.userId);
         }
     }
 }
